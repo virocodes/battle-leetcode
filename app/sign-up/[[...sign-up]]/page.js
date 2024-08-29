@@ -10,7 +10,6 @@ export default function SignUpPage() {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                sx={{ minHeight: '100vh' }} // Optional: Ensure the content is centered vertically
             >
                 <Typography variant="h4">Sign Up</Typography>
                 <SignUp />
