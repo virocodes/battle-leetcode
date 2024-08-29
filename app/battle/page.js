@@ -49,18 +49,18 @@ export default function Battle() {
 
             </Split>
 
-            <div className="split flex-grow">
-            <Split className="split flex-grow" direction="vertical" sizes={[30, 70]} minSize={100}>
-                {/* Top Right Section */}
-                <div className="bg-green-300 p-4">
-                    <h1 className="text-center text-white p-4">Top Right Section</h1>
-                </div>
+            <div className="flex flex-col">
+                {/* <Split className="split flex-grow" direction="vertical" sizes={[30, 70]} minSize={100}> */}
+                    {/* Top Right Section */}
+                    <div className="bg-green-300 p-4">
+                        <h1 className="text-center text-white p-4">Top Right Section</h1>
+                    </div>
 
-                {/* Bottom Right Section */}
-                <div className="bg-yellow-300 p-4">
-                    <h1 className="text-white text-2xl font-bold mb-2">Terminal</h1>
-                </div>
-                </Split>
+                    {/* Bottom Right Section */}
+                    <div className="bg-yellow-300 p-4 h-full">
+                        <h1 className="text-white text-2xl font-bold mb-2">Terminal</h1>
+                    </div>
+                {/* </Split> */}
             </div>
         </Split>
 
