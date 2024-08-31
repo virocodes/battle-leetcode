@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
 
+// import 'codemirror/mode/javascript/javascript'; 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -12,23 +13,21 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider
-      frontendApi={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-    >
+    <ClerkProvider>
       <html lang="en">
         <body className={inter.className + " font-sans bg-gray-50"}>
           <header className="bg-transparent shadow-lg">
-            <nav className="flex items-center justify-between px-6 py-4">
+            <nav className="flex items-center justify-between px-6 py-4 dark:bg-dark-layer-2 dark:text-white">
               <Link href="/" passHref>
-                <p className="text-2xl font-bold text-gray-900">Battle Leetcode</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">Battle Leetcode</p>
               </Link>
               <div className="flex items-center space-x-4">
                 <SignedOut>
                   <Link href="/sign-in" passHref>
-                    <p className="text-gray-900 hover:underline">Sign-In</p>
+                    <p className="text-gray-900 hover:underline dark:text-white">Login</p>
                   </Link>
                   <Link href="/sign-up" passHref>
-                    <p className="text-gray-900 hover:underline">Sign-Up</p>
+                    <p className="text-gray-900 hover:underline dark:text-white">Sign Up</p>
                   </Link>
                 </SignedOut>
                 <SignedIn>
@@ -39,7 +38,7 @@ export default function RootLayout({ children }) {
           </header>
 
           {/* Content */}
-          <main className="min-h-screen pt-4">{children}</main>
+          <main className="">{children}</main>
         </body>
       </html>
     </ClerkProvider>
