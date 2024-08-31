@@ -19,7 +19,7 @@ const CodeMirrorEditor = ({ code, setCode }) => {
       value={code}
       options={{
         mode: 'javascript', // Change this to the mode you need
-        theme: 'material', // Change this to the theme you prefer
+        // theme: 'material', // Change this to the theme you prefer
         lineNumbers: true,
         readOnly: false,
         firstLineNumber: 1,

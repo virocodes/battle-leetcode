@@ -12,8 +12,8 @@ function HealthBar({ label, health }) {
     return (
         <div className="mb-4">
             <div className="flex justify-between mb-1">
-                <span className="text-white font-bold">{label}</span>
-                <span className="text-white font-bold">{health}%</span>
+                <span className="font-bold">{label}</span>
+                <span className="font-bold">{health}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div className="bg-green-600 h-2.5 rounded-full" style={{ width: `${health}%` }}></div>
@@ -28,59 +28,52 @@ export default function Battle() {
     const [opponentHealth, setOpponentHealth] = useState(50);
 
     return (
-        // <div className="h-screen grid grid-rows-[200px_1fr] grid-cols-3 gap-4 p-4">
-        <Split className="split h-screen" direction="horizontal" sizes={[75, 25]} minSize={100}>
-            <Split direction="vertical" sizes={[30, 70]} minSize={100}>
-                {/* Top Left Section - Problem Statement */}
-                <div className="col-span-2 bg-blue-300 p-4 overflow-auto">
-                    {/* <h1 className="text-center text-white p-4">Top Right Section</h1> */}
+        <Split className="split h-screen" direction="horizontal" sizes={[50, 50]} minSize={100}>
+            {/* Left - Problem Statement */}
+            <div className="col-span-2 p-4 overflow-auto">
 
-                    <h1 className="text-white text-2xl font-bold mb-2 ">Problem Statement</h1>
-                    <div className="bg-white p-4 rounded shadow-lg text-black">
-                        <p>
-                            Given an array of integers, return the indices of the two numbers
-                            such that they add up to a specific target.
-                        </p>
-                        <p className="mt-2">
-                            You may assume that each input would have exactly one solution, and
-                            you may not use the same element twice.
-                        </p>
-                        <p className="mt-2 font-semibold">Example:</p>
-                        <pre className="bg-gray-100 p-2 rounded overflow-auto">
-                            <code>
-                                Input: nums = [2, 7, 11, 15], target = 9{"\n"}
-                                Output: [0, 1]{"\n"}
-                                Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-                            </code>
-                        </pre>
-                    </div>
+                <h1 className="text-2xl font-bold mb-2 ">Problem Statement</h1>
+                <div className="p-4">
+                    <p>
+                        Given an array of integers, return the indices of the two numbers
+                        such that they add up to a specific target.
+                    </p>
+                    <p className="mt-2">
+                        You may assume that each input would have exactly one solution, and
+                        you may not use the same element twice.
+                    </p>
+                    <p className="mt-2 font-semibold">Example:</p>
+                    <pre className="bg-gray-100 p-2 rounded overflow-auto">
+                        <code>
+                            Input: nums = [2, 7, 11, 15], target = 9{"\n"}
+                            Output: [0, 1]{"\n"}
+                            Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+                        </code>
+                    </pre>
+                </div>
+            </div>
+
+            {/* Right */}
+            <Split direction="vertical" sizes={[20, 70, 10]} minSize={200}>
+                {/* Battle Status */}
+                <div className="w-full p-4 overflow-auto">
+                    <h1 className="text-center text-2xl font-bold mb-4">Battle Status</h1>
+                    <HealthBar label="Player" health={playerHealth} />
+                    <HealthBar label="Opponent" health={opponentHealth} />
                 </div>
 
-
-
-                {/* Bottom Left Section */}
-                <div className="col-span-2 bg-red-300 p-4">
-                    <h1 className="text-white text-2xl font-bold mb-2">Code Editor</h1>
+                {/* Code Editor */}
+                <div className="w-full p-4 overflow-auto">
+                    <h1 className="text-2xl font-bold mb-2">Code Editor</h1>
                     <CodeMirrorEditor code={code} setCode={setCode} />
                 </div>
 
+                {/* Terminal */}
+                <div className="w-full p-4 overflow-auto">
+                    <h1 className="text-2xl font-bold mb-2">Terminal</h1>
+                </div>
             </Split>
 
-            <div className="flex flex-col">
-                {/* <Split className="split flex-grow" direction="vertical" sizes={[30, 70]} minSize={100}> */}
-                    {/* Top Right Section */}
-                    <div className="bg-green-300 p-4">
-                        <h1 className="text-center text-white text-2xl font-bold mb-4">Battle Status</h1>
-                        <HealthBar label="Player" health={playerHealth} />
-                        <HealthBar label="Opponent" health={opponentHealth} />
-                    </div>
-
-                    {/* Bottom Right Section */}
-                    <div className="bg-yellow-300 p-4 h-full">
-                        <h1 className="text-white text-2xl font-bold mb-2">Terminal</h1>
-                    </div>
-                {/* </Split> */}
-            </div>
         </Split>
 
     );
