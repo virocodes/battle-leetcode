@@ -8,8 +8,25 @@ const CodeMirrorEditor = dynamic(() => import('../components/CodeMirrorEditor'),
     ssr: false,
 });
 
+function HealthBar({ label, health }) {
+    return (
+        <div className="mb-4">
+            <div className="flex justify-between mb-1">
+                <span className="text-white font-bold">{label}</span>
+                <span className="text-white font-bold">{health}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div className="bg-green-600 h-2.5 rounded-full" style={{ width: `${health}%` }}></div>
+            </div>
+        </div>
+    );
+}
+
 export default function Battle() {
     const [code, setCode] = useState('hello world');
+    const [playerHealth, setPlayerHealth] = useState(63);
+    const [opponentHealth, setOpponentHealth] = useState(50);
+
     return (
         // <div className="h-screen grid grid-rows-[200px_1fr] grid-cols-3 gap-4 p-4">
         <Split className="split h-screen" direction="horizontal" sizes={[75, 25]} minSize={100}>
@@ -29,7 +46,7 @@ export default function Battle() {
                             you may not use the same element twice.
                         </p>
                         <p className="mt-2 font-semibold">Example:</p>
-                        <pre className="bg-gray-100 p-2 rounded">
+                        <pre className="bg-gray-100 p-2 rounded overflow-auto">
                             <code>
                                 Input: nums = [2, 7, 11, 15], target = 9{"\n"}
                                 Output: [0, 1]{"\n"}
@@ -53,7 +70,9 @@ export default function Battle() {
                 {/* <Split className="split flex-grow" direction="vertical" sizes={[30, 70]} minSize={100}> */}
                     {/* Top Right Section */}
                     <div className="bg-green-300 p-4">
-                        <h1 className="text-center text-white p-4">Top Right Section</h1>
+                        <h1 className="text-center text-white text-2xl font-bold mb-4">Battle Status</h1>
+                        <HealthBar label="Player" health={playerHealth} />
+                        <HealthBar label="Opponent" health={opponentHealth} />
                     </div>
 
                     {/* Bottom Right Section */}

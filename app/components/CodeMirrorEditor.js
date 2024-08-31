@@ -24,6 +24,9 @@ const CodeMirrorEditor = ({ code, setCode }) => {
         readOnly: false,
         firstLineNumber: 1,
         lineWrapping: true,
+        // extraKeys: { "Ctrl-Space": "autocomplete" },
+        // foldGutter: true,
+        // gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       }}
       onChange={(editor, data, value) => {
       }}
