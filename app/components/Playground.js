@@ -7,9 +7,10 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { githubLight } from '@uiw/codemirror-theme-github';
 import { javascript } from "@codemirror/lang-javascript";
 import EditorFooter from '@/app/components/EditorFooter';
-
+import { useUser } from '@clerk/nextjs'
 
 export default function Playground({problem}) {
+    const { isLoaded, isSignedIn, user } = useUser()
 
     // const [problem, setProblem] = useState(problem);
     const [activeTestCaseId, setActiveTestCaseId] = useState(0);
@@ -46,57 +47,62 @@ export default function Playground({problem}) {
     };
 
     const handleSubmit = async () => {
-        // if (!user) {
-        // 	toast.error("Please login to submit your code", {
-        // 		position: "top-center",
-        // 		autoClose: 3000,
-        // 		theme: "dark",
-        // 	});
-        // 	return;
-        // }
-        // try {
-        // 	userCode = userCode.slice(userCode.indexOf(problem.starterFunctionName));
-        // 	const cb = new Function(`return ${userCode}`)();
-        // 	const handler = problems[pid].handlerFunction;
+        if (!user) {
+            console.log("Please login to submit your code");
+        	// toast.error("Please login to submit your code", {
+        	// 	position: "top-center",
+        	// 	autoClose: 3000,
+        	// 	theme: "dark",
+        	// });
+        	return;
+        }
+        try {
+        	setCode(code.slice(code.indexOf(problem.starterFunctionName)));
+        	const cb = new Function(`return ${code}`)();
+        	const handler = problem.handlerFunction;
 
-        // 	if (typeof handler === "function") {
-        // 		const success = handler(cb);
-        // 		if (success) {
-        // 			toast.success("Congrats! All tests passed!", {
-        // 				position: "top-center",
-        // 				autoClose: 3000,
-        // 				theme: "dark",
-        // 			});
-        // 			setSuccess(true);
-        // 			setTimeout(() => {
-        // 				setSuccess(false);
-        // 			}, 4000);
+        	if (typeof handler === "function") {
+        		const success = handler(cb);
+        		if (success) {
+                    console.log("Test case passed");
+        			// toast.success("Congrats! All tests passed!", {
+        			// 	position: "top-center",
+        			// 	autoClose: 3000,
+        			// 	theme: "dark",
+        			// });
+        			// setSuccess(true);
+        			// setTimeout(() => {
+        			// 	setSuccess(false);
+        			// }, 4000);
 
-        // 			const userRef = doc(firestore, "users", user.uid);
-        // 			await updateDoc(userRef, {
-        // 				solvedProblems: arrayUnion(pid),
-        // 			});
-        // 			setSolved(true);
-        // 		}
-        // 	}
-        // } catch (error) {
-        // 	console.log(error.message);
-        // 	if (
-        // 		error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")
-        // 	) {
-        // 		toast.error("Oops! One or more test cases failed", {
-        // 			position: "top-center",
-        // 			autoClose: 3000,
-        // 			theme: "dark",
-        // 		});
-        // 	} else {
-        // 		toast.error(error.message, {
-        // 			position: "top-center",
-        // 			autoClose: 3000,
-        // 			theme: "dark",
-        // 		});
-        // 	}
-        // }
+        			// const userRef = doc(firestore, "users", user.uid);
+        			// await updateDoc(userRef, {
+        			// 	solvedProblems: arrayUnion(pid),
+        			// });
+        			// setSolved(true);
+        		}
+        	}
+        } catch (error) {
+            // show errors under test cases section
+        	console.log(error.message);
+        	if (
+        		error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")
+        	) {
+                console.log("Test case failed");
+        		// toast.error("Oops! One or more test cases failed", {
+        		// 	position: "top-center",
+        		// 	autoClose: 3000,
+        		// 	theme: "dark",
+        		// });
+        	} else {
+                console.log(error.message);
+        		// toast.error(error.message, {
+        		// 	position: "top-center",
+        		// 	autoClose: 3000,
+        		// 	theme: "dark",
+        		// });
+        	}
+        }
     };
 
     return (
