@@ -1,10 +1,12 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Split from 'react-split';
 
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { oneDark } from '@codemirror/theme-one-dark';
+import { githubLight } from '@uiw/codemirror-theme-github';
 import { javascript } from "@codemirror/lang-javascript";
 
 import { twoSum } from '@/app/utils/problems/two-sum';
@@ -25,10 +27,42 @@ function HealthBar({ label, health }) {
 }
 
 export default function Battle() {
-    const [code, setCode] = useState('hello world');
     const [playerHealth, setPlayerHealth] = useState(63);
     const [opponentHealth, setOpponentHealth] = useState(50);
+
     const [problem, setProblem] = useState(twoSum);
+    
+    const [code, setCode] = useState(problem.starterCode);
+    const [theme, setTheme] = useState(githubLight);
+
+    // Load code from local storage when the component mounts
+    useEffect(() => {
+        const savedCode = localStorage.getItem('userCode');
+        if (savedCode) {
+            setCode(savedCode);
+        }
+
+        // Detect the user's preferred color scheme
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        setTheme(mediaQuery.matches ? vscodeDark : githubLight);
+
+        // Listen for changes in the user's color scheme
+        const handleChange = (e) => {
+            setTheme(e.matches ? vscodeDark : githubLight);
+        };
+        mediaQuery.addEventListener('change', handleChange);
+
+        // Cleanup listener on unmount
+        return () => {
+            mediaQuery.removeEventListener('change', handleChange);
+        };
+    }, []);
+
+    // Save code to local storage whenever it changes
+    const handleCodeChange = (newCode) => {
+        setCode(newCode);
+        localStorage.setItem('userCode', newCode);
+    };
 
     return (
         <Split className="split h-screen dark:bg-dark-layer-1 dark:text-white" direction="horizontal" sizes={[50, 50]} minSize={100}>
@@ -92,9 +126,9 @@ export default function Battle() {
                     <h1 className="text-2xl font-bold mb-2">Code Editor</h1>
                     <CodeMirror
                         value={code}
-                        theme={vscodeDark}
+                        theme={theme}
                         onChange={(editor, data, value) => {
-                            setCode(value);
+                            handleCodeChange(editor);
                         }}
                         extensions={[javascript()]}
                     />
