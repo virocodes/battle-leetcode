@@ -1,15 +1,21 @@
-"use client";
-
+'use client';
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Button, Box, CircularProgress } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useAuth } from '@clerk/nextjs'; // Clerk auth hook
+import { Container, Typography, Button, Box, CircularProgress } from "@mui/material";
 
 export default function WaitingRoom() {
     const [players, setPlayers] = useState(1);
     const [secondsRemaining, setSecondsRemaining] = useState(5);
     const router = useRouter();
+    const { isSignedIn } = useAuth(); // Check if user is signed in
 
     useEffect(() => {
+        if (!isSignedIn) {
+            router.push('/sign-in'); // Redirect to sign-in if not signed in
+            return;
+        }
+
         const interval = setInterval(() => {
             setPlayers((prev) => prev + 1); // Simulate another player joining
         }, 3000);
@@ -17,7 +23,6 @@ export default function WaitingRoom() {
         if (players >= 2) {
             clearInterval(interval);
 
-            // Start the countdown when both players have joined
             const countdownInterval = setInterval(() => {
                 setSecondsRemaining((prev) => {
                     if (prev > 1) {
@@ -32,7 +37,7 @@ export default function WaitingRoom() {
         }
 
         return () => clearInterval(interval);
-    }, [players, router]);
+    }, [players, router, isSignedIn]);
 
     return (
         <Box
@@ -41,7 +46,7 @@ export default function WaitingRoom() {
                 alignItems: "center",
                 justifyContent: "center",
                 minHeight: "100vh",
-                background: "linear-gradient(to bottom, #2c3e50, #4ca1af)", // Blue gradient background
+                background: "linear-gradient(to bottom, #2c3e50, #4ca1af)",
                 color: "#fff",
                 textAlign: "center",
                 fontFamily: "Roboto, sans-serif",
@@ -54,7 +59,7 @@ export default function WaitingRoom() {
                     sx={{
                         fontWeight: "bold",
                         mb: 4,
-                        animation: "fadeIn 2s ease-in-out", // Fade-in animation for the title
+                        animation: "fadeIn 2s ease-in-out",
                         "@keyframes fadeIn": {
                             "0%": { opacity: 0 },
                             "100%": { opacity: 1 },
@@ -76,7 +81,7 @@ export default function WaitingRoom() {
                     gutterBottom
                     sx={{
                         mb: 2,
-                        animation: "slideIn 2s ease-out", // Slide-in animation for player count
+                        animation: "slideIn 2s ease-out",
                         "@keyframes slideIn": {
                             "0%": { transform: "translateX(-100%)" },
                             "100%": { transform: "translateX(0)" },
@@ -91,7 +96,7 @@ export default function WaitingRoom() {
                         variant="body1"
                         sx={{
                             color: "rgba(255, 255, 255, 0.8)",
-                            animation: "pulse 2s infinite", // Pulse animation for the starting message
+                            animation: "pulse 2s infinite",
                             "@keyframes pulse": {
                                 "0%": { opacity: 1 },
                                 "50%": { opacity: 0.5 },
@@ -124,3 +129,4 @@ export default function WaitingRoom() {
         </Box>
     );
 }
+                      
