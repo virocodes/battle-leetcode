@@ -1,14 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import Split from 'react-split';
-import { vscodeDark } from "@uiw/codemirror-theme-vscode";
-import { oneDark } from '@codemirror/theme-one-dark';
-import { githubLight } from '@uiw/codemirror-theme-github';
 import { twoSum } from '@/app/utils/problems/two-sum';
 import Image from 'next/image';
 import Playground from '@/app/components/Playground';
 import HealthBar from '@/app/components/HealthBar';
 import { useUser } from '@clerk/nextjs'
+
+import { useAuth } from '@clerk/nextjs'; // Clerk authentication hook
+import { db } from '../firebase/firebaseConfig'; // Firebase Firestore configuration
+import { collection, addDoc } from "firebase/firestore"; 
+import { fetchRandomProblem } from '../utils/problems'; // Utility function to fetch problems
 
 export default function Battle() {
     const { isLoaded, isSignedIn, user } = useUser()
@@ -16,6 +18,14 @@ export default function Battle() {
     const [playerHealth, setPlayerHealth] = useState(63);
     const [opponentHealth, setOpponentHealth] = useState(50);
     const [problem, setProblem] = useState(twoSum);
+
+    // useEffect(() => {
+    //     const getProblem = async () => {
+    //         const problemData = await fetchRandomProblem();
+    //         setProblem(problemData);
+    //     };
+    //     getProblem();
+    // }, []);
 
     return (
         <Split className="split h-screen dark:bg-dark-layer-1 dark:text-white" direction="horizontal" sizes={[50, 50]} minSize={100}>
@@ -71,7 +81,7 @@ export default function Battle() {
             </div>
 
             {/* Right */}
-            <Playground problem={problem} user={user}/>    
+            <Playground problem={problem} user={user} setOpponentHealth={setOpponentHealth} setPlayerHealth={setPlayerHealth} playerHealth={playerHealth} opponentHealth={opponentHealth} />    
 
         </Split>
 

@@ -10,7 +10,7 @@ import EditorFooter from '@/app/components/EditorFooter';
 import toast, { Toaster } from 'react-hot-toast';
 
 
-export default function Playground({problem, user}) {
+export default function Playground({problem, user, setOpponentHealth, setPlayerHealth, playerHealth, opponentHealth}) {
 
     // const [problem, setProblem] = useState(problem);
     const [activeTestCaseId, setActiveTestCaseId] = useState(0);
@@ -46,6 +46,30 @@ export default function Playground({problem, user}) {
         localStorage.setItem('userCode', newCode);
     };
 
+    // const submitCode = async () => {
+    //     // const isCorrect = Math.random() > 0.5; // Simulated correctness check
+    //     if (isCorrect) {
+    //         setOpponentHealth((prevHealth) => Math.max(prevHealth - 10, 0));
+    //     } else {
+    //         setPlayerHealth((prevHealth) => Math.max(prevHealth - 10, 0));
+    //     }
+
+    //     if (user && problem) {
+    //         const battleResult = {
+    //             userId: user.id,
+    //             problemId: problem.title,
+    //             playerHealth,
+    //             opponentHealth,
+    //             timestamp: new Date().toISOString(),
+    //         };
+    //         try {
+    //             await addDoc(collection(db, "battles"), battleResult);
+    //         } catch (e) {
+    //             console.error("Error adding document: ", e);
+    //         }
+    //     }
+    // };
+
     const handleSubmit = async () => {
         if (!user) {
             console.log("Please login to submit your code");
@@ -63,21 +87,23 @@ export default function Playground({problem, user}) {
         	if (typeof handler === "function") {
         		const success = handler(cb);
         		if (success) {
-                    console.log("Test case passed");
+                    console.log("Test cases passed");
+                    // TODO: decrease health by function of complexity?
+                    setOpponentHealth((prevHealth) => Math.max(prevHealth - 10, 0));
+                    // TODO: player gets next problem until either is at 0
                     toast.success("Congrats! All tests passed!", {
                         position: "top-center",
                         duration: 3000,
                     });
-        			// setSuccess(true);
-        			// setTimeout(() => {
-        			// 	setSuccess(false);
-        			// }, 4000);
+                    // TODO: handle submit differently than run
+    
+                    // TODO: add to solved problems?
+                    // TODO: should we only store battle on end of battle?
 
         			// const userRef = doc(firestore, "users", user.uid);
         			// await updateDoc(userRef, {
         			// 	solvedProblems: arrayUnion(pid),
         			// });
-        			// setSolved(true);
         		}
         	}
         } catch (error) {
