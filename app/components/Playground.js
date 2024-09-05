@@ -7,10 +7,10 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { githubLight } from '@uiw/codemirror-theme-github';
 import { javascript } from "@codemirror/lang-javascript";
 import EditorFooter from '@/app/components/EditorFooter';
-import { useUser } from '@clerk/nextjs'
+import toast, { Toaster } from 'react-hot-toast';
 
-export default function Playground({problem}) {
-    const { isLoaded, isSignedIn, user } = useUser()
+
+export default function Playground({problem, user}) {
 
     // const [problem, setProblem] = useState(problem);
     const [activeTestCaseId, setActiveTestCaseId] = useState(0);
@@ -49,11 +49,10 @@ export default function Playground({problem}) {
     const handleSubmit = async () => {
         if (!user) {
             console.log("Please login to submit your code");
-        	// toast.error("Please login to submit your code", {
-        	// 	position: "top-center",
-        	// 	autoClose: 3000,
-        	// 	theme: "dark",
-        	// });
+            toast.error("Please login to submit your code", {
+                position: "top-center",
+                duration: 3000,
+            });
         	return;
         }
         try {
@@ -65,11 +64,10 @@ export default function Playground({problem}) {
         		const success = handler(cb);
         		if (success) {
                     console.log("Test case passed");
-        			// toast.success("Congrats! All tests passed!", {
-        			// 	position: "top-center",
-        			// 	autoClose: 3000,
-        			// 	theme: "dark",
-        			// });
+                    toast.success("Congrats! All tests passed!", {
+                        position: "top-center",
+                        duration: 3000,
+                    });
         			// setSuccess(true);
         			// setTimeout(() => {
         			// 	setSuccess(false);
@@ -89,24 +87,23 @@ export default function Playground({problem}) {
         		error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")
         	) {
                 console.log("Test case failed");
-        		// toast.error("Oops! One or more test cases failed", {
-        		// 	position: "top-center",
-        		// 	autoClose: 3000,
-        		// 	theme: "dark",
-        		// });
+                toast.error("Oops! One or more test cases failed", {
+                    position: "top-center",
+                    duration: 3000,
+                });
         	} else {
                 console.log(error.message);
-        		// toast.error(error.message, {
-        		// 	position: "top-center",
-        		// 	autoClose: 3000,
-        		// 	theme: "dark",
-        		// });
+                toast.error(error.message, {
+                    position: "top-center",
+                    duration: 3000,
+                });
         	}
         }
     };
 
     return (
         <div className='flex flex-col '>
+            <Toaster />
             <Split className='flex-grow dark:bg-dark-layer-1 dark:text-white' direction="vertical" sizes={[70, 30]} minSize={100}>
                 {/* Code Editor */}
                 <div className="w-full p-4 overflow-auto">

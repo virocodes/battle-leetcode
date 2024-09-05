@@ -8,8 +8,11 @@ import { twoSum } from '@/app/utils/problems/two-sum';
 import Image from 'next/image';
 import Playground from '@/app/components/Playground';
 import HealthBar from '@/app/components/HealthBar';
+import { useUser } from '@clerk/nextjs'
 
 export default function Battle() {
+    const { isLoaded, isSignedIn, user } = useUser()
+
     const [playerHealth, setPlayerHealth] = useState(63);
     const [opponentHealth, setOpponentHealth] = useState(50);
     const [problem, setProblem] = useState(twoSum);
@@ -68,7 +71,7 @@ export default function Battle() {
             </div>
 
             {/* Right */}
-            <Playground problem={problem} />    
+            <Playground problem={problem} user={user}/>    
 
         </Split>
 
