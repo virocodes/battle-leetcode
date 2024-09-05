@@ -6,13 +6,20 @@ import Image from 'next/image';
 import Playground from '@/app/components/Playground';
 import HealthBar from '@/app/components/HealthBar';
 import { useUser } from '@clerk/nextjs'
-
+import { useParams } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs'; // Clerk authentication hook
-import { db } from '../firebase/firebaseConfig'; // Firebase Firestore configuration
+import { db } from '../../firebase/firebaseConfig'; // Firebase Firestore configuration
 import { collection, addDoc } from "firebase/firestore"; 
-import { fetchRandomProblem } from '../utils/problems'; // Utility function to fetch problems
+import { fetchRandomProblem } from '../../utils/problems'; // Utility function to fetch problems
 
 export default function Battle() {
+    const {roomId} = useParams();
+    // TODO: store roomId in db along with userIds
+    // TODO: if roomId not found or found but game over, redirect to home
+    // TODO: if roomId found, check if userIds match
+    // TODO: if userIds match, continue
+    // TODO: if userIds don't match, redirect to home
+
     const { isLoaded, isSignedIn, user } = useUser()
 
     const [playerHealth, setPlayerHealth] = useState(63);
