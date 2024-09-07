@@ -5,8 +5,26 @@ import { Button, Container, Typography, Box } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Importing the Play icon
 import '@fontsource/roboto';  // Importing the Roboto font
 
-export default function HomePage() {
+import { useUser } from "@clerk/clerk-react";
+// import { useUser } from '@clerk/nextjs' // Try using this instead in case there's clerk errors in the terminal
+import { push, ref } from "firebase/database";
+import { useState } from 'react';
+import { database } from './firebase/firebaseConfig';
+
+export default function Home() {
+    const { isSignedIn, user, isLoaded } = useUser();
+    const [roomId, setRoomId] = useState('');
     const router = useRouter();
+
+    const handleCreateRoom = () => {
+        const newRoomRef = push(ref(database, 'rooms'));
+        const newRoomId = newRoomRef.key;
+        router.push(`/battle/${newRoomId}`);
+    }
+
+    const handleJoinRoom = () => {
+        router.push(`/battle/${roomId}`);
+    }
 
     const handleJoinGame = () => {
         router.push('/waiting');
@@ -34,7 +52,7 @@ export default function HomePage() {
                 <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
                     Battle Leetcode
                 </Typography>
-                <Button
+                {/* <Button
                     variant="contained"
                     color="secondary"
                     size="large"
@@ -63,7 +81,18 @@ export default function HomePage() {
                     }}
                 >
                     Join Game
-                </Button>
+                </Button> */}
+                <h2 className="text-2xl">Welcome, {user?.fullName}</h2>
+                <button onClick={handleCreateRoom} className="text-2xl font-bold text-blue-500 border border-blue-500 rounded px-4 py-2 hover:bg-blue-500 hover:text-white">Create Room</button>
+                <p className="text-2xl">or</p>
+                <input
+                    className="text-2xl font-bold text-blue-500 border border-blue-500 rounded px-4 py-2"
+                    type="text"
+                    placeholder="Enter room ID"
+                    value={roomId}
+                    onChange={(e) => setRoomId(e.target.value)}
+                />
+                <button onClick={handleJoinRoom} className="text-2xl font-bold text-blue-500 border border-blue-500 rounded px-4 py-2 hover:bg-blue-500 hover:text-white">Join Room</button>
             </Container>
         </Box>
     );
