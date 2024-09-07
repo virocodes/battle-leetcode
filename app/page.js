@@ -6,6 +6,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Importing the Play
 import '@fontsource/roboto';  // Importing the Roboto font
 
 import { useUser } from "@clerk/clerk-react";
+// import { useUser } from '@clerk/nextjs' // Try using this instead in case there's clerk errors in the terminal
 import { push, ref } from "firebase/database";
 import { useState } from 'react';
 import { database } from './firebase/firebaseConfig';
